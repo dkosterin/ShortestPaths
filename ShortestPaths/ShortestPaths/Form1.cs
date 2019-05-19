@@ -50,5 +50,14 @@ namespace ShortestPaths
 			graph.Draw(g, 20, pictureBox1.Height - 20);
 			pictureBox1.Invalidate();
 		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			Form2 f = new Form2();
+			f.ShowDialog();
+			graph.AddBarrier(f.Points);
+			graph.Draw(g, 20, pictureBox1.Height - 20);
+			pictureBox1.Invalidate();
+		}
 	}
 }
