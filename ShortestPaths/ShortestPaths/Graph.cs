@@ -20,14 +20,14 @@ namespace ShortestPaths
 		{
 			barriers.Add(new Barrier(barrierPoints));
 		}
-		public void Draw(Graphics g)
+		public void Draw(Graphics g, float w, float h)
 		{
-			Pen p = new Pen(Color.Black, 2);
-			for (int i = 0; i < points.Count; i++)
-				g.DrawLine(p, points[i], points[i + 1]);
-			g.DrawLine(p, points[points.Count - 1], points[0]);
+			Pen p = new Pen(Color.Purple, 2);
+			for (int i = 0; i < points.Count - 1; i++)
+				g.DrawLine(p, w + points[i].X * 50, h - points[i].Y * 50, w + points[i + 1].X * 50, h - points[i + 1].Y * 50);
+			g.DrawLine(p, w + points[points.Count - 1].X * 50, h - points[points.Count - 1].Y * 50, w + points[0].X * 50, h - points[0].Y * 50);
 			foreach (var b in barriers)
-				b.Draw(g);
+				b.Draw(g, w, h);
 		}
 	}
 }
