@@ -59,5 +59,12 @@ namespace ShortestPaths
 			graph.Draw(g, 20, pictureBox1.Height - 20);
 			pictureBox1.Invalidate();
 		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			var startPoint = new PointF(Single.Parse(textBox2.Text), Single.Parse(textBox3.Text));
+			var finishPoint = new PointF(Single.Parse(textBox4.Text), Single.Parse(textBox5.Text));
+			graph.FindShortestPath(startPoint, finishPoint);
+		}
 	}
 }
