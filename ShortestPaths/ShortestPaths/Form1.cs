@@ -47,6 +47,7 @@ namespace ShortestPaths
 				points.Add(new PointF(Single.Parse(str[0]), Single.Parse(str[1])));
 			}
 			graph = new Graph(points);
+			Init();
 			graph.Draw(g, 20, pictureBox1.Height - 20);
 			pictureBox1.Invalidate();
 		}
@@ -55,7 +56,9 @@ namespace ShortestPaths
 		{
 			Form2 f = new Form2();
 			f.ShowDialog();
-			graph.AddBarrier(f.Points);
+			if(f.Points != null)
+				graph.AddBarrier(f.Points);
+			Init();
 			graph.Draw(g, 20, pictureBox1.Height - 20);
 			pictureBox1.Invalidate();
 		}
@@ -64,7 +67,14 @@ namespace ShortestPaths
 		{
 			var startPoint = new PointF(Single.Parse(textBox2.Text), Single.Parse(textBox3.Text));
 			var finishPoint = new PointF(Single.Parse(textBox4.Text), Single.Parse(textBox5.Text));
-			graph.FindShortestPath(startPoint, finishPoint);
+			Init();
+			graph.Draw(g, 20, pictureBox1.Height - 20);
+			graph.FindShortestPath(startPoint, finishPoint, g, 20, pictureBox1.Height - 20);
+			SolidBrush br = new SolidBrush(Color.Yellow);
+			g.FillEllipse(br, 20 + startPoint.X * 50 - 3, pictureBox1.Height - 20 - startPoint.Y * 50 - 3, 6, 6);
+			br = new SolidBrush(Color.Green);
+			g.FillEllipse(br, 20 + finishPoint.X * 50 - 3, pictureBox1.Height - 20 - finishPoint.Y * 50 - 3, 6, 6);
+			pictureBox1.Invalidate();
 		}
 	}
 }

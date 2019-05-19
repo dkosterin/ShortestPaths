@@ -20,6 +20,8 @@ namespace ShortestPaths
 		{
 			get
 			{
+				if (string.IsNullOrEmpty(textBox1.Text))
+					return null;
 				var strings = textBox1.Text.Split(new String[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 				List<PointF> points = new List<PointF>();
 				foreach (var s in strings)

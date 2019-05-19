@@ -70,7 +70,7 @@ namespace ShortestPaths
 			{
 				for(int j = 0; j < barriers[i].Points.Count; j++)
 				{
-					for(int k = i; k < barriers.Count; k++)
+					for(int k = i + 1; k < barriers.Count; k++)
 					{
 						int o = barriers[i].Points.Count - j;
 						for(int l = 0; l < barriers[k].Points.Count; l++)
@@ -209,9 +209,68 @@ namespace ShortestPaths
 			PointF ab = new PointF(b.X - a.X, b.Y - a.Y);
 			return Math.Sqrt(ab.X * ab.X + ab.Y * ab.Y);
 		}
-		public void FindShortestPath(PointF startPoint, PointF finishPoint)
+		public void FindShortestPath(PointF startPoint, PointF finishPoint, Graphics g, float w, float h)
 		{
 			var graph = CreateGraph(startPoint, finishPoint);
+			int n = graph.GetLength(0);
+			var coords = new PointF[n];
+			for (int i = 0; i < points.Count; i++)
+				coords[i] = points[i];
+			int m = points.Count;
+			for(int i = 0; i < barriers.Count; i++)
+				for(int j = 0; j < barriers[i].Points.Count; j++)
+				{
+					coords[m] = barriers[i].Points[j];
+					m++;
+				}
+			coords[n - 2] = startPoint;
+			coords[n - 1] = finishPoint;
+
+			double[] mark = new double[n];
+			int[] prev = new int[n];
+			int[] state = new int[n];
+			for (int i = 0; i < n; i++)
+			{
+				mark[i] = 10000;
+				prev[i] = -1;
+				state[i] = 0;
+			}
+			mark[n - 2] = 0;
+			int k = n - 2;
+			while(!isStateOnes(state))
+			{
+				double min = 10000;
+				for (int i = 0; i < n; i++)
+				{
+					if (graph[k, i] != 0 && state[i] != 1 && mark[i] >  graph[k, i] + mark[k])
+					{
+						mark[i] = graph[k, i] + mark[k];
+						prev[i] = k;
+					}
+				}
+				state[k] = 1;
+				for(int i = 0; i < n; i++)
+					if(mark[i] < min && state[i] != 1)
+					{
+						min = mark[i];
+						k = i;
+					}
+			}
+			Pen p = new Pen(Color.Red, 2);
+			k = n - 1;
+			while(mark[k] != 0)
+			{
+				int l = prev[k];
+				g.DrawLine(p, w + coords[k].X * 50, h - coords[k].Y * 50, w + coords[l].X * 50, h - coords[l].Y * 50);
+				k = l;
+			}
+		}
+		bool isStateOnes(int[] state)
+		{
+			for (int i = 0; i < state.Length; i++)
+				if (state[i] == 0)
+					return false;
+			return true;
 		}
 	}
 }
